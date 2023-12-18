@@ -1,0 +1,16 @@
+[package]
+name = "RustyReaderBot"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "0.2", features = ["full"] }
+reqwest = "0.10"
+serde = "1"
+serde_json = "1"
+rss = "2"
+dissolve = "0.2"
+chrono = "0.4"
+tbot = "0.6"

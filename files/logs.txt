@@ -1,0 +1,2 @@
+2023/12/18-12:41 - error sending request for url (https://www.badurl.com/totesterrors.rss): error trying to connect: tcp connect error: Operation timed out (os error 60)
+2023/12/18-12:41 - reached end of input without finding a complete channel
