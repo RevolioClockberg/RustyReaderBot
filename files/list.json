@@ -1,62 +1,7 @@
 [
   {
-    "name": "Zataz",
-    "url": "https://www.zataz.com/rss/zataz-news.rss",
-    "last_post": "2023/12/14-16:38"
-  },
-  {
     "name": "Test",
     "url": "https://www.badurl.com/totesterrors.rss",
     "last_post": "test"
-  },
-  {
-    "name": "Korben",
-    "url": "https://korben.info/feed",
-    "last_post": "2023/12/18-09:00"
-  },
-  {
-    "name": "KitPloit",
-    "url": "https://feeds.feedburner.com/PentestTools",
-    "last_post": "2023/12/17-08:30"
-  },
-  {
-    "name": "KaliLinuxTutorials",
-    "url": "https://kalilinuxtutorials.com/feed",
-    "last_post": "2023/12/15-08:07"
-  },
-  {
-    "name": "VulnHub",
-    "url": "https://www.vulnhub.com/feeds/added/rss",
-    "last_post": "2022/07/11-00:00"
-  },
-  {
-    "name": "CertFR",
-    "url": "https://www.cert.ssi.gouv.fr/feed",
-    "last_post": "2023/12/18-09:05"
-  },
-  {
-    "name": "ANSSI",
-    "url": "https://cyber.gouv.fr/actualites/feed",
-    "last_post": "2023/12/18-09:58"
-  },
-  {
-    "name": "ExploitAlert",
-    "url": "https://www.exploitalert.com/feed/",
-    "last_post": "Test"
-  },
-  {
-    "name": "KaliLinuxFR",
-    "url": "https://www.kali-linux.fr/feed",
-    "last_post": "2023/06/22-10:32"
-  },
-  {
-    "name": "n0secure",
-    "url": "https://www.n0secure.org/feed",
-    "last_post": "2023/06/09-07:41"
-  },
-  {
-    "name": "0x0FF",
-    "url": "https://www.0x0ff.info/feed",
-    "last_post": "2021/07/16-09:00"
   }
 ]
