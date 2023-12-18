@@ -3,7 +3,6 @@ Simple independent (without database) Telegram Bot for RSS feeds.<br>
 This simple bot is made for send update notifications on Telegram channel from differents RSS feeds.<br>
 
 # Setup
-## Deamon setup
 1. [Install Rust](https://doc.rust-lang.org/cargo/getting-started/installation.html)
 
 2. Install dependencies
