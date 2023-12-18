@@ -1,4 +1,3 @@
-use std::env;
 use std::fs::OpenOptions;
 use std::io::prelude::*;
 use chrono::prelude::*;
