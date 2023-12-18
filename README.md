@@ -13,7 +13,7 @@ sudo apt install librust-openssl-dev
 
 3. Download project
 ```bash
-cd /home/user/
+cd /var/www/
 git clone https://github.com/RevolioClockberg/RustyReaderBot.git
 ``` 
 
@@ -51,7 +51,7 @@ After=syslog.target network-online.target
  
 [Service]
 Type=simple
-ExecStart=/home/user/RustyReaderBot/target/release/RustyReaderBot
+ExecStart=/var/www/RustyReaderBot/target/release/RustyReaderBot
 Restart=always
 RestartSec=10
 TimeoutStartSec=5
@@ -72,6 +72,7 @@ sudo systemctl start telegrambot
 
 
 # Todo
+* Delete hardcoded path.
 * Command to add/delete/modify RSS feeds.
 * Command to reinitialize dates and receive all last posts already send on Channel.
 * Manage multiple channels.
