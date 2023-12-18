@@ -29,7 +29,7 @@ vim files/list.json
     "name": "Test",
     "url": "https://www.badurl.com/totesterrors.rss",
     "last_post": "test"
-  },
+  }
 ]
 ```
 
