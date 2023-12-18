@@ -35,8 +35,6 @@ vim files/list.json
 
 5. Build project
 ```bash
-cd RustyReaderBot
-mkdir files && touch files/logs.txt && touch files/list.json
 cargo build --release
 ```
 
