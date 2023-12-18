@@ -6,7 +6,6 @@ use chrono::prelude::*;
 
 // Write logs on local logs/logs.txt file
 pub fn write_logs(logs: String) {
-    let file_path = format!("{}/../../files/logs.txt", env::current_exe().unwrap().into_os_string().to_str().unwrap()).to_owned();
     let mut data_file = OpenOptions::new().append(true).open("/var/www/RustyReaderBot/files/logs.txt").expect("Can't open log file !");
     let date = Local::now().format("%Y/%m/%d-%H:%M").to_string();
     let log = format!("{} - {}\n", date, logs);
