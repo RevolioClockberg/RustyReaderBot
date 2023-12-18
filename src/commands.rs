@@ -43,7 +43,7 @@ pub async fn send_notif(context: Arc<Command<Text>>) {
                                                         Err(e) => logs::write_logs(e.to_string()),
                                                     }
                                                 }
-                                                delay_for(Duration::from_secs(3)).await;
+                                                delay_for(Duration::from_secs(10)).await;
                                             },
                                             Err(e) => logs::write_logs(e.to_string()),
                                         }
