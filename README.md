@@ -28,7 +28,7 @@ cargo build --release
 ```bash
 sudo vim /lib/systemd/system/telegrambot.service
 ```
-```json
+```txt
 [Unit]
 Description=RustyReaderBot - Bot Telegram
 
