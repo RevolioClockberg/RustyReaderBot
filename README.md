@@ -14,20 +14,54 @@ sudo apt install librust-openssl-dev
 
 3. Download project
 ```bash
+cd /home/user/
 git clone https://github.com/RevolioClockberg/RustyReaderBot.git
 ``` 
 
 4. Build project
 ```bash
-cd 
+cd RustyReaderBot
 cargo build --release
 ```
+
+5. Setup service
+```bash
+sudo vim /lib/systemd/system/telegrambot.service
+```
+```json
+[Unit]
+Description=RustyReaderBot - Bot Telegram
+
+Wants=network.target
+After=syslog.target network-online.target
+ 
+[Service]
+Type=simple
+ExecStart=/home/user/RustyReaderBot/target/release/RustyReaderBot
+#Restart=always
+#RestartSec=10
+TimeoutStartSec=5
+KillMode=process 
+
+[Install]
+WantedBy=multi-user.target
+```
+```bash
+sudo systemctl daemon-reload
+```
+
+6. Run
+```bash
+export TELEGRAM_BOT_TOKEN=<YOUR-BOT-TOKEN>
+sudo systemctl start telegrambot
+```
+
 
 # Todo
 * Command to add/delete/modify RSS feeds.
 * Command to reinitialize dates and receive all last posts already send on Channel.
 * Manage multiple channels.
-* Docker.
+* Make it run inn docker container.
 
 # Based on
 * [easy-rss](https://docs.rs/easy_rss/1.0.1/easy_rss/index.html)
