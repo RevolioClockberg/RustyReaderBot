@@ -17,13 +17,30 @@ cd /home/user/
 git clone https://github.com/RevolioClockberg/RustyReaderBot.git
 ``` 
 
-4. Build project
+4. Create needed files
 ```bash
 cd RustyReaderBot
+mkdir files && touch files/logs.txt && touch files/list.json
+vim files/list.json
+```
+```json
+[
+  {
+    "name": "Test",
+    "url": "https://www.badurl.com/totesterrors.rss",
+    "last_post": "test"
+  },
+]
+```
+
+5. Build project
+```bash
+cd RustyReaderBot
+mkdir files && touch files/logs.txt && touch files/list.json
 cargo build --release
 ```
 
-5. Setup service
+6. Setup service
 ```bash
 sudo vim /lib/systemd/system/telegrambot.service
 ```
@@ -49,7 +66,7 @@ WantedBy=multi-user.target
 sudo systemctl daemon-reload
 ```
 
-6. Run
+7. Run
 ```bash
 export TELEGRAM_BOT_TOKEN=<YOUR-BOT-TOKEN>
 sudo systemctl start telegrambot
