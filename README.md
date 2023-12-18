@@ -55,7 +55,8 @@ ExecStart=/home/user/RustyReaderBot/target/release/RustyReaderBot
 Restart=always
 RestartSec=10
 TimeoutStartSec=5
-KillMode=process 
+KillMode=process
+Environment="TELEGRAM_BOT_TOKEN=<YOUR-BOT-TOKEN>"
 
 [Install]
 WantedBy=multi-user.target
@@ -66,7 +67,6 @@ sudo systemctl daemon-reload
 
 7. Run
 ```bash
-export TELEGRAM_BOT_TOKEN=<YOUR-BOT-TOKEN>
 sudo systemctl start telegrambot
 ```
 
