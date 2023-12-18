@@ -38,8 +38,8 @@ After=syslog.target network-online.target
 [Service]
 Type=simple
 ExecStart=/home/user/RustyReaderBot/target/release/RustyReaderBot
-#Restart=always
-#RestartSec=10
+Restart=always
+RestartSec=10
 TimeoutStartSec=5
 KillMode=process 
 
