@@ -1,5 +1,6 @@
-use std::collections::HashMap;
 use std::fs;
+use std::env;
+use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
 
 
@@ -15,7 +16,8 @@ use serde_json::Result;
 
 fn get_feeds() -> Result<Vec<Feed>> {
     // Grab JSON file
-    let file_path = "files/list.json".to_owned();
+    let path = env::current_dir().unwrap();
+    let file_path = format!("{}/files/list.json", path.into_os_string().to_str().unwrap()).to_owned();
     let contents = fs::read_to_string(file_path).expect("Couldn't find or load that file.");
     
     // Parse the file content to map JSON on Feed object
