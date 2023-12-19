@@ -19,41 +19,44 @@ pub async fn send_notif(context: Arc<Command<Text>>) {
                 Ok(feeds_urls) => {
                     // Parse URLs
                     for url in feeds_urls {
-                        if rss::check_url(&url).await {
-                            // Get flux names
-                            match readlist::get_feeds_name(&url) {
-                                Ok(name) => {
-                                    // Get date of last post send by message
-                                    match readlist::get_feeds_date(&url) {
-                                        Ok(last_posted_msg) => {
-                                            // Get date of last post from site
-                                            match rss::get_post_date(&url).await{
-                                                Ok(last_post) => {
-                                                    // Compare date
-                                                    if last_posted_msg != last_post {
-                                                        // Keep new date for update
-                                                        new_posts_date.insert(url.clone(), last_post.clone());
-                                                        // Get post and send it by message
-                                                        match rss::get_rss(&url, name).await {
-                                                            Ok(result) => {
-                                                                let _ = context.bot.send_message(
-                                                                    context.chat.id,
-                                                                    parameters::Text::with_markdown(&result)
-                                                                ).is_web_page_preview_disabled(true).call().await;
-                                                            },
-                                                            Err(e) => logs::write_logs(e.to_string()),
+                        match rss::check_url(&url).await {
+                            Ok (_) => {
+                                // Get flux names
+                                match readlist::get_feeds_name(&url) {
+                                    Ok(name) => {
+                                        // Get date of last post send by message
+                                        match readlist::get_feeds_date(&url) {
+                                            Ok(last_posted_msg) => {
+                                                // Get date of last post from site
+                                                match rss::get_post_date(&url).await{
+                                                    Ok(last_post) => {
+                                                        // Compare date
+                                                        if last_posted_msg != last_post {
+                                                            // Keep new date for update
+                                                            new_posts_date.insert(url.clone(), last_post.clone());
+                                                            // Get post and send it by message
+                                                            match rss::get_rss(&url, name).await {
+                                                                Ok(result) => {
+                                                                    let _ = context.bot.send_message(
+                                                                        context.chat.id,
+                                                                        parameters::Text::with_markdown(&result)
+                                                                    ).is_web_page_preview_disabled(true).call().await;
+                                                                },
+                                                                Err(e) => logs::write_logs(e.to_string()),
+                                                            }
                                                         }
-                                                    }
-                                                    delay_for(Duration::from_secs(10)).await;
-                                                },
-                                                Err(e) => logs::write_logs(e.to_string()),
-                                            }
-                                        },
-                                        Err(e) => logs::write_logs(e.to_string()),
-                                    }
-                                },
-                                Err(e) => logs::write_logs(e.to_string()),
-                            }
+                                                        delay_for(Duration::from_secs(10)).await;
+                                                    },
+                                                    Err(e) => logs::write_logs(e.to_string()),
+                                                }
+                                            },
+                                            Err(e) => logs::write_logs(e.to_string()),
+                                        }
+                                    },
+                                    Err(e) => logs::write_logs(e.to_string()),
+                                }
+                            },
+                            Err(e) => logs::write_logs(e.to_string()),
                         }
                     }
                 },

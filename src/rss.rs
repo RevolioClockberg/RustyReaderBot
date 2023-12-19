@@ -6,32 +6,13 @@ use reqwest::{self, Url};
 
 
 // Check if an url can join RSS feeds list. 
-pub async fn check_url(url: &str) -> bool {
-    let url = Url::parse(url).unwrap();
+pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
+    let url = Url::parse(url)?;
 
-    match reqwest::get(url).await {
-        Ok(s) => {
-            let content = s.bytes().await;
-            match content{
-                Ok(content) => {
-                    let channel = Channel::read_from(&content[..]);
-                    match channel {
-                        Ok(channel) => { 
-                            let item = channel.items.first().unwrap(); 
-                            match item.pub_date() {
-                                Some(_) => return true,
-                                None => return false,
-                            }
-                        },
-                        Err(_) => return false
-                    }
-                },
-                Err(_) => return false
-            }
-        },
-        Err(_) => return false,
-    };
-
+    let content = reqwest::get(url).await?.bytes().await?;
+    let channel = Channel::read_from(&content[..])?;
+    channel.items.first().unwrap().pub_date().unwrap();
+    Ok(())
 }
 
 
