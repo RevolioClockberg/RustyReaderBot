@@ -16,14 +16,16 @@ pub async fn check_url(url: &str) -> bool {
                 Ok(content) => {
                     let channel = Channel::read_from(&content[..]);
                     match channel {
-                        Ok(channel) => { let item = channel.items.first().unwrap(); 
-                                        match item.pub_date() {
-                                            Some(_) => return true,
-                                            None => return false,
-                                        }}
+                        Ok(channel) => { 
+                            let item = channel.items.first().unwrap(); 
+                            match item.pub_date() {
+                                Some(_) => return true,
+                                None => return false,
+                            }
+                        },
                         Err(_) => return false
                     }
-                }
+                },
                 Err(_) => return false
             }
         },
