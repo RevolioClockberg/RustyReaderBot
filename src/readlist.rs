@@ -83,7 +83,7 @@ pub fn update_posts_date(new_posts_date: HashMap<String, String>) -> Result<()> 
     let data = serde_json::to_string_pretty(&all_feeds)?;
 
     // Write JSON file
-    let file_path = "files/list.json".to_owned();
+    let file_path = "/var/www/RustyReaderBot/files/list.json".to_owned();
     fs::write(file_path, data).unwrap();
 
     Ok(())
