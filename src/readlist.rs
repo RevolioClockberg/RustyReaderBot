@@ -15,7 +15,8 @@ use serde_json::Result;
 
 fn get_feeds() -> Result<Vec<Feed>> {
     // Grab JSON file
-    let file_path = "/var/www/RustyReaderBot/files/list.json".to_owned();
+    let file_path = "/var/www/RustyReaderBot/files/list.json";
+    // let file_path = "files/list.json";
     let contents = fs::read_to_string(file_path).expect("Couldn't find or load that file.");
     
     // Parse the file content to map JSON on Feed object
@@ -26,64 +27,53 @@ fn get_feeds() -> Result<Vec<Feed>> {
 
 
 pub fn get_feeds_url() -> Result<Vec<String>> {
-    // Get Feeds objects
-    let all_feeds = get_feeds()?;
+    // Get all feed url's
+    let urls: Vec<String> = get_feeds()?.iter()
+                                        .map(|i| i.url.clone())
+                                        .collect();
 
-    let mut urls: Vec<String> = Vec::new();
-
-    // Parse all feeds to display them
-    for i in all_feeds.iter() {
-        let j = i.url.clone();
-        urls.push(j);
-    }
     Ok(urls)
 }
 
 
 pub fn get_feeds_date(url: &str) -> Result<String> {
-    // Get Feeds objects
-    let all_feeds = get_feeds()?;
+    // Get last publish post date
+    let date = get_feeds()?.iter()
+                                    .filter(|u| u.url == url)
+                                    .map(|u| u.last_post.clone())
+                                    .collect();
 
-    let mut date = String::new();
-
-    for i in all_feeds.iter() {
-        if i.url == url {
-            date = i.last_post.clone();
-        }
-    }
     Ok(date)
 }
 
 
 pub fn get_feeds_name(url: &str) -> Result<String> {
-    // Get Feeds objects
-    let all_feeds = get_feeds()?;
+    // Get name of a feed
+    let name = get_feeds()?.iter()
+                                    .filter(|u| u.url == url)
+                                    .map(|u| u.name.clone())
+                                    .collect();
 
-    let mut name = String::new();
-
-    for i in all_feeds.iter() {
-        if i.url == url {
-            name = i.name.clone();
-        }
-    }
     Ok(name)
 }
 
 
 pub fn update_posts_date(new_posts_date: HashMap<String, String>) -> Result<()> {
     // Get Feeds objects
-    let mut all_feeds = get_feeds()?;
+    let mut all_feeds: Vec<Feed> = get_feeds()?;
+
 
     for i in all_feeds.iter_mut() {
         if new_posts_date.get(&i.url).is_some() {
-            i.last_post = new_posts_date.get(&i.url).unwrap().clone();
+            i.last_post = new_posts_date.get(&i.url).unwrap().to_owned();
         }
     }
 
     let data = serde_json::to_string_pretty(&all_feeds)?;
 
     // Write JSON file
-    let file_path = "/var/www/RustyReaderBot/files/list.json".to_owned();
+    let file_path = "/var/www/RustyReaderBot/files/list.json";
+    // let file_path = "files/list.json";
     fs::write(file_path, data).unwrap();
 
     Ok(())
