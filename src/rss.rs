@@ -15,7 +15,7 @@ pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
     match channel.items.first().unwrap().pub_date() {
         Some (_) => Ok(()),
         None => {
-            let e: Box<dyn Error + Send + Sync> = String::from("test").into();
+            let e: Box<dyn Error + Send + Sync> = String::from("Can't get publication date").into();
             return Err(e);
         },
     }
