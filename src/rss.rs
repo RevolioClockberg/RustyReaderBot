@@ -11,8 +11,14 @@ pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
 
     let content = reqwest::get(url).await?.bytes().await?;
     let channel = Channel::read_from(&content[..])?;
-    channel.items.first().unwrap().pub_date().unwrap();
-    Ok(())
+    // channel.items.first().unwrap().pub_date().unwrap();
+    match channel.items.first().unwrap().pub_date() {
+        Some (_) => Ok(()),
+        None => {
+            let e: Box<dyn Error + Send + Sync> = String::from("test").into();
+            return Err(e);
+        },
+    }
 }
 
 
