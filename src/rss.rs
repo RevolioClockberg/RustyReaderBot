@@ -3,19 +3,21 @@ use chrono::DateTime;
 use rss::*;
 use dissolve::strip_html_tags;
 use reqwest::{self, Url};
+use reqwest::header::USER_AGENT;
 
 
 // Check if an url can join RSS feeds list. 
 pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
+    let err_url = url.clone();
     let url = Url::parse(url)?;
-
-    let content = reqwest::get(url).await?.bytes().await?;
+    let client = reqwest::Client::new();
+    let content = client.get(url).header(USER_AGENT, "Rusty Bot").send().await?.bytes().await?;
     let channel = Channel::read_from(&content[..])?;
-    // channel.items.first().unwrap().pub_date().unwrap();
+
     match channel.items.first().unwrap().pub_date() {
         Some (_) => Ok(()),
         None => {
-            let e: Box<dyn Error + Send + Sync> = String::from("Can't get publication date").into();
+            let e: Box<dyn Error + Send + Sync> = format!("Can't get publication date from {}", err_url).into();
             return Err(e);
         },
     }
