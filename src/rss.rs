@@ -8,7 +8,7 @@ use reqwest::header::USER_AGENT;
 
 // Check if an url can join RSS feeds list. 
 pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
-    let err_url = url.clone();
+    let err_url = url;
     let url = Url::parse(url)?;
     let client = reqwest::Client::new();
     let content = client.get(url).header(USER_AGENT, "Rusty Bot").send().await?.bytes().await?;
