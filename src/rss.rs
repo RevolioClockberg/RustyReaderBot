@@ -14,10 +14,10 @@ pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
     let content = client.get(url).header(USER_AGENT, "Rusty Bot").send().await?.bytes().await?;
     let channel = Channel::read_from(&content[..])?;
 
-    match channel.items.first().unwrap().pub_date() {
+    match &channel.items.first().unwrap().title() {
         Some (_) => Ok(()),
         None => {
-            let e: Box<dyn Error + Send + Sync> = format!("Can't get publication date from {}", err_url).into();
+            let e: Box<dyn Error + Send + Sync> = format!("Can't get publication from {}", err_url).into();
             return Err(e);
         },
     }
@@ -35,7 +35,7 @@ pub async fn get_post_date(url: &str) -> Result<String, Box<dyn Error + Send + S
     if let Some(last_post) = channel.items().first() {
         publish_date = 
             match last_post.pub_date() {
-                Some(result) => DateTime::parse_from_rfc2822(result).unwrap().format("%Y/%m/%d-%H:%M").to_string(),
+                Some(result) => DateTime::parse_from_rfc2822(result)?.format("%Y/%m/%d-%H:%M").to_string(),
                 None => String::from("no publish date"),
             };
     }

@@ -31,6 +31,10 @@ async fn main() {
 
 
 async fn start(context: Arc<Command<Text>>) {
+    let _ = context.bot.send_message(
+        context.chat.id.clone(),
+        parameters::Text::with_markdown("Ok, I'm Starting !")
+    ).is_web_page_preview_disabled(true).call().await;
     loop {
         // Hashmap to get and update last post send
         let mut new_posts_date: HashMap<String, String> = HashMap::new();
