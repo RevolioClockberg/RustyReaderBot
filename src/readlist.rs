@@ -69,7 +69,7 @@ pub fn update_posts_date(new_posts_date: HashMap<String, String>) -> Result<()> 
 
     // Write JSON file
     let file_path = "/var/www/RustyReaderBot/files/list.json";
-    // let file_path = "files/list.json";  // for debug
+    //let file_path = "files/list.json";  // for debug
     fs::write(file_path, data).unwrap();
 
     Ok(())
