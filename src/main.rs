@@ -36,7 +36,7 @@ async fn start(context: Arc<Command<Text>>) {
         context.chat.id.clone(),
         parameters::Text::with_markdown("Ok, I'm Starting !")
     ).is_web_page_preview_disabled(true).call().await;
-    if Ok(String::from("TRUE")) == env::var("RUSTY_BOT_LOGS") {
+    if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
         logs::write_debug(format!("Bot started on channel {}.", context.chat.id.clone()))
     }
     loop {
@@ -60,7 +60,7 @@ async fn start(context: Arc<Command<Text>>) {
                                         // Get post and send it by message
                                         match rss::get_rss(&feed.url, &feed.name, &last_publication).await {
                                             Ok(result) => {
-                                                if Ok(String::from("TRUE")) == env::var("RUSTY_BOT_LOGS") {
+                                                if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
                                                     logs::write_debug(format!("Message sent for {} RSS feed with {} URL.", &feed.name, &feed.url))
                                                 }
                                                 let _ = context.bot.send_message(
@@ -70,7 +70,7 @@ async fn start(context: Arc<Command<Text>>) {
                                             },
                                             Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string())),
                                         }
-                                    } else if Ok(String::from("TRUE")) == env::var("RUSTY_BOT_LOGS") {
+                                    } else if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
                                             logs::write_debug(format!("No new posts for {} RSS feed with {} URL.", &feed.name, &feed.url))
                                     }
                                     delay_for(Duration::from_secs(30)).await;
