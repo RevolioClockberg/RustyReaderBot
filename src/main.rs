@@ -81,9 +81,8 @@ async fn start(context: Arc<Command<Text>>) {
                                     } else if debug {
                                             logs::write_debug(format!("No new posts for {} RSS feed with {} URL.", &feed.name, &feed.url))
                                     }
-                                    if debug {logs::write_debug(format!("Start waiting for 30 sec ..."))}
+                                    if debug {logs::write_debug(format!("Waiting to avoid flooding channel"))}
                                     delay_for(Duration::from_secs(30)).await;
-                                    if debug {logs::write_debug(format!("Going back to work"))}
                                 },
                                 Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string()), debug),
                             }
