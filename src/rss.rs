@@ -44,7 +44,7 @@ pub async fn get_post_date(url: &str) -> Result<String, Box<dyn Error + Send + S
 
 
 // Get all RSS post informations
-pub async fn get_rss(url: &str, name:String) -> Result<String, Box<dyn Error + Send + Sync>> {
+pub async fn get_rss(url: &str, name: &str, last_publications: &str) -> Result<String, Box<dyn Error + Send + Sync>> {
     let mut msg = String::from("no post found");
 
     // Get all RSS objects (each posts from an url)
@@ -55,7 +55,7 @@ pub async fn get_rss(url: &str, name:String) -> Result<String, Box<dyn Error + S
     if let Some(last_post) = channel.items().first() {
 
         // Get post publish date
-        let publish_date = get_post_date(&url).await?;
+        let publish_date = last_publications;
 
         // Get post title
         let title = {

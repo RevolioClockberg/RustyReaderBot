@@ -56,6 +56,8 @@ Restart=always
 RestartSec=10
 TimeoutStartSec=5
 KillMode=process
+Environment="RUSTY_DEBUG=FALSE"
+Environment="RUSTY_BOT_LOGS=/var/log/RustyReaderBot"
 Environment="TELEGRAM_BOT_TOKEN=<YOUR-BOT-TOKEN>"
 
 [Install]
