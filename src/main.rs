@@ -97,7 +97,10 @@ async fn start(context: Arc<Command<Text>>) {
         match readlist::update_posts_date(new_posts_date) {
             // Wait 10min before next check
             Ok(_result) => {
-                if debug {logs::write_debug(format!("Start waiting for 10 min ..."))}
+                if debug {
+                    logs::write_debug(format!("Date from RSS posts are updated."));
+                    logs::write_debug(format!("Start waiting for 10 min ..."));
+                }
                 delay_for(Duration::from_secs(600)).await;
                 if debug {logs::write_debug(format!("Going back to work"))}
             },
