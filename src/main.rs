@@ -36,6 +36,9 @@ async fn start(context: Arc<Command<Text>>) {
         context.chat.id.clone(),
         parameters::Text::with_markdown("Ok, I'm Starting !")
     ).is_web_page_preview_disabled(true).call().await;
+    if Ok(String::from("TRUE")) == env::var("RUSTY_BOT_LOGS") {
+        logs::write_debug(format!("Bot started on channel {}.", context.chat.id.clone()))
+    }
     loop {
         // Hashmap to get and update last post send
         let mut new_posts_date: HashMap<String, String> = HashMap::new();
