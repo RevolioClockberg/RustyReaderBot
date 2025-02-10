@@ -78,7 +78,7 @@ sudo systemctl start telegrambot
 * Command to add/delete/modify RSS feeds.
 * Command to reinitialize dates and receive all last posts already send on Channel.
 * Manage multiple channels.
-* Make it run inn docker container.
+* Make it run in docker container.
 
 # Based on
 * [easy-rss](https://docs.rs/easy_rss/1.0.1/easy_rss/index.html)

@@ -15,8 +15,8 @@ use serde_json::Result;
 
 pub fn get_feeds() -> Result<Vec<Feed>> {
     // Grab JSON file
-    //let file_path = "/var/www/RustyReaderBot/files/list.json";
-    let file_path = "files/list.json";  // for debug
+    let file_path = "/var/www/RustyReaderBot/files/list.json";
+    //let file_path = "files/list.json";  // for debug
     let contents = fs::read_to_string(file_path).expect("Couldn't find or load that file.");
     
     // Parse the file content to map JSON on Feed object
@@ -68,8 +68,8 @@ pub fn update_posts_date(new_posts_date: HashMap<String, String>) -> Result<()> 
     let data = serde_json::to_string_pretty(&all_feeds)?;
 
     // Write JSON file
-    //let file_path = "/var/www/RustyReaderBot/files/list.json";
-    let file_path = "files/list.json";  // for debug
+    let file_path = "/var/www/RustyReaderBot/files/list.json";
+    //let file_path = "files/list.json";  // for debug
     fs::write(file_path, data).unwrap();
 
     Ok(())
