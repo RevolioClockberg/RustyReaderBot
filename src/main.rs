@@ -58,7 +58,7 @@ async fn start(context: Arc<Command<Text>>) {
                                         match rss::get_rss(&feed.url, &feed.name, &last_publication).await {
                                             Ok(result) => {
                                                 if Ok(String::from("TRUE")) == env::var("RUSTY_BOT_LOGS") {
-                                                    logs::write_debug(format!("Send message for {} RSS feed with {} URL.", &feed.name, &feed.url))
+                                                    logs::write_debug(format!("Message sent for {} RSS feed with {} URL.", &feed.name, &feed.url))
                                                 }
                                                 let _ = context.bot.send_message(
                                                     context.chat.id.clone(),
@@ -67,6 +67,8 @@ async fn start(context: Arc<Command<Text>>) {
                                             },
                                             Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string())),
                                         }
+                                    } else if Ok(String::from("TRUE")) == env::var("RUSTY_BOT_LOGS") {
+                                            logs::write_debug(format!("No new posts for {} RSS feed with {} URL.", &feed.name, &feed.url))
                                     }
                                     delay_for(Duration::from_secs(30)).await;
                                 },
