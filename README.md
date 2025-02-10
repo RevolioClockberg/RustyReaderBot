@@ -1,14 +1,13 @@
 # RustyReaderBot
-Simple independent (without database) Telegram Bot for RSS feeds.<br>
-This simple bot is made for send update notifications on Telegram channel from differents RSS feeds.<br>
+Simple independent (and without database) Telegram Bot for RSS feeds.<br>
+This is a simple [tbot](https://crates.io/crates/tbot) for sending update notifications on Telegram channel from differents RSS feeds.<br>
 
 # Setup
 1. [Install Rust](https://doc.rust-lang.org/cargo/getting-started/installation.html)
 
 2. Install dependencies
 ```bash
-sudo apt install build-essential
-sudo apt install librust-openssl-dev
+sudo apt install -y build-essential librust-openssl-dev
 ```
 
 3. Download project
@@ -19,8 +18,8 @@ git clone https://github.com/RevolioClockberg/RustyReaderBot.git
 
 4. Create needed files
 ```bash
+sudo mkdir /var/log/RustyReaderBot && sudo touch /var/log/RustyReaderBot/errors.log && sudo touch /var/log/RustyReaderBot/debug.log
 cd RustyReaderBot
-mkdir files && touch files/logs.txt && touch files/list.json
 vim files/list.json
 ```
 ```json
