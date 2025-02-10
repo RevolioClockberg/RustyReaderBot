@@ -36,10 +36,20 @@ async fn start(context: Arc<Command<Text>>) {
         context.chat.id.clone(),
         parameters::Text::with_markdown("Ok, I'm Starting !")
     ).is_web_page_preview_disabled(true).call().await;
+    
+    // Set debug variable
+    let mut debug = false;
     if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
+        debug = true;
         logs::write_debug(format!("Bot started on channel {}.", context.chat.id.clone()))
     }
+
     loop {
+        // Set debug variable at every loop
+        if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
+            debug = true;
+        }
+
         // Hashmap to get and update last post send
         let mut new_posts_date: HashMap<String, String> = HashMap::new();
 
@@ -60,42 +70,50 @@ async fn start(context: Arc<Command<Text>>) {
                                         // Get post and send it by message
                                         match rss::get_rss(&feed.url, &feed.name, &last_publication).await {
                                             Ok(result) => {
-                                                if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
-                                                    logs::write_debug(format!("Message sent for {} RSS feed with {} URL.", &feed.name, &feed.url))
-                                                }
+                                                if debug {logs::write_debug(format!("Message sent for {} RSS feed with {} URL.", &feed.name, &feed.url))}
                                                 let _ = context.bot.send_message(
                                                     context.chat.id.clone(),
                                                     parameters::Text::with_markdown(&result)
                                                 ).is_web_page_preview_disabled(true).call().await;
                                             },
-                                            Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string())),
+                                            Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string()), debug),
                                         }
-                                    } else if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
+                                    } else if debug {
                                             logs::write_debug(format!("No new posts for {} RSS feed with {} URL.", &feed.name, &feed.url))
                                     }
+                                    if (debug) {logs::write_debug(format!("Start waiting 30 sec..."))}
                                     delay_for(Duration::from_secs(30)).await;
+                                    if (debug) {logs::write_debug(format!("Going back to work"))}
                                 },
-                                Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string())),
+                                Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string()), debug),
                             }
                         },
-                        Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string())),
+                        Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string()), debug),
                     }
                 }
             },
-            Err(e) => logs::write_logs(format!("Error to get feeds on local file --- {}", e.to_string())),
+            Err(e) => logs::write_logs(format!("Error to get feeds on local file --- {}", e.to_string()), debug),
         }
         // Update new dates from new posts
         match readlist::update_posts_date(new_posts_date) {
             // Wait 10min before next check
             Ok(_result) => delay_for(Duration::from_secs(600)).await,
-            Err(e) => logs::write_logs(format!("Error to update dates on local file --- {}", e.to_string())),
+            Err(e) => logs::write_logs(format!("Error to update dates on local file --- {}", e.to_string()), debug),
         } 
     }
 }
 
 
 async fn list(context: Arc<Command<Text>>) {
+    // Set debug variable
+    let mut debug = false;
+    if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
+        debug = true;
+        logs::write_debug(format!("Bot started on channel {}.", context.chat.id.clone()))
+    }
+
     let mut list_feeds_name = String::new();
+    
     // Get RSS URLs
     match readlist::get_feeds_url() {
         Ok(feeds_urls) => {
@@ -104,11 +122,11 @@ async fn list(context: Arc<Command<Text>>) {
                 // Get flux names
                 match readlist::get_feeds_name(&url) {
                     Ok(name) => list_feeds_name.push_str(&format!("- {}\n", name)),
-                    Err(e) => logs::write_logs(e.to_string()),
+                    Err(e) => logs::write_logs(e.to_string(), debug),
                 }
             }
         },
-        Err(e) => logs::write_logs(e.to_string()),
+        Err(e) => logs::write_logs(e.to_string(), debug),
     }
     let _ = context.bot.send_message(context.chat.id, &list_feeds_name).call().await;
 }
