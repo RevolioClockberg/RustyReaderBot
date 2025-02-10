@@ -6,7 +6,7 @@ use chrono::prelude::*;
 
 // Write logs on local logs/logs.txt file
 pub fn write_logs(logs: String) {
-    let file_path = format!("{:?}/errors.log", env::var("RUSTY_BOT_LOGS"));
+    let file_path = format!("{}/errors.log", env::var("RUSTY_BOT_LOGS").unwrap());
     let mut data_file = OpenOptions::new().append(true).open(file_path).expect("Can't open log file !");
     let date = Local::now().format("%Y/%m/%d-%H:%M").to_string();
     let log = format!("{} - {}\n", date, logs);
@@ -17,7 +17,7 @@ pub fn write_logs(logs: String) {
 }
 
 pub fn write_debug(logs: String) {
-    let file_path = format!("{:?}/debug.log", env::var("RUSTY_BOT_LOGS"));
+    let file_path = format!("{}/debug.log", env::var("RUSTY_BOT_LOGS").unwrap());
     let mut data_file = OpenOptions::new().append(true).open(file_path).expect("Can't open debug file !");
     let date = Local::now().format("%Y/%m/%d-%H:%M").to_string();
     let log = format!("{} - {}\n", date, logs);
