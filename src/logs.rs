@@ -11,9 +11,7 @@ pub fn write_logs(logs: String, debug: bool) {
     let date = Local::now().format("%Y/%m/%d-%H:%M").to_string();
     let log = format!("{} - {}\n", date, logs);
     data_file.write_all(log.as_bytes()).expect("write logs failed");
-    if debug {
-        write_debug(logs);
-    }
+    if debug {write_debug(logs)}
 }
 
 pub fn write_debug(logs: String) {

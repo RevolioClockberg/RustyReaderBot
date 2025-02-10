@@ -81,9 +81,9 @@ async fn start(context: Arc<Command<Text>>) {
                                     } else if debug {
                                             logs::write_debug(format!("No new posts for {} RSS feed with {} URL.", &feed.name, &feed.url))
                                     }
-                                    if (debug) {logs::write_debug(format!("Start waiting 30 sec..."))}
+                                    if debug {logs::write_debug(format!("Start waiting for 30 sec ..."))}
                                     delay_for(Duration::from_secs(30)).await;
-                                    if (debug) {logs::write_debug(format!("Going back to work"))}
+                                    if debug {logs::write_debug(format!("Going back to work"))}
                                 },
                                 Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string()), debug),
                             }
@@ -97,7 +97,11 @@ async fn start(context: Arc<Command<Text>>) {
         // Update new dates from new posts
         match readlist::update_posts_date(new_posts_date) {
             // Wait 10min before next check
-            Ok(_result) => delay_for(Duration::from_secs(600)).await,
+            Ok(_result) => {
+                if debug {logs::write_debug(format!("Start waiting for 10 min ..."))}
+                delay_for(Duration::from_secs(600)).await;
+                if debug {logs::write_debug(format!("Going back to work"))}
+            },
             Err(e) => logs::write_logs(format!("Error to update dates on local file --- {}", e.to_string()), debug),
         } 
     }
@@ -109,7 +113,7 @@ async fn list(context: Arc<Command<Text>>) {
     let mut debug = false;
     if Ok(String::from("TRUE")) == env::var("RUSTY_DEBUG") {
         debug = true;
-        logs::write_debug(format!("Bot started on channel {}.", context.chat.id.clone()))
+        logs::write_debug(format!("Writing list of RSS fedd on channel {}.", context.chat.id.clone()))
     }
 
     let mut list_feeds_name = String::new();
