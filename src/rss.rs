@@ -3,6 +3,7 @@ use chrono::DateTime;
 use rss::*;
 use dissolve::strip_html_tags;
 use reqwest::{self, Url};
+use reqwest::header::USER_AGENT;
 
 
 // Check if an url is an RSS feeds and return last publication date. 
@@ -11,7 +12,7 @@ pub async fn check_url(url: &str) -> Result<String, Box<dyn Error + Send + Sync>
     let err_url = url;
     let url = Url::parse(url)?;
     let client = reqwest::Client::new();
-    let content = client.get(url).send().await?.bytes().await?;
+    let content = client.get(url).header(USER_AGENT, "Rusty Bot").send().await?.bytes().await?;
     let channel = Channel::read_from(&content[..])?;
 
     match &channel.items.first().unwrap().title() {
