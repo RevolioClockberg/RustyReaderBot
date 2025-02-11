@@ -16,7 +16,7 @@ pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
     match &channel.items.first().unwrap().title() {
         Some (_) => Ok(()),
         None => {
-            let e: Box<dyn Error + Send + Sync> = format!("Can't get publication from {}", err_url).into();
+            let e: Box<dyn Error + Send + Sync> = format!("Can't get last post from {}", err_url).into();
             return Err(e);
         },
     }

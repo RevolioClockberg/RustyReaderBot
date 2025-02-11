@@ -76,7 +76,7 @@ async fn start(context: Arc<Command<Text>>) {
                                                     parameters::Text::with_markdown(&result)
                                                 ).is_web_page_preview_disabled(true).call().await;
                                             },
-                                            Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string()), debug),
+                                            Err(e) => logs::write_logs(format!("Error on \'get_rss()\' with {} feed --- {}", &feed.name, e.to_string()), debug),
                                         }
                                     } else if debug {
                                             logs::write_debug(format!("No new posts for {} RSS feed with {} URL.", &feed.name, &feed.url))
@@ -84,10 +84,10 @@ async fn start(context: Arc<Command<Text>>) {
                                     if debug {logs::write_debug(format!("Waiting to avoid flooding channel"))}
                                     delay_for(Duration::from_secs(30)).await;
                                 },
-                                Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string()), debug),
+                                Err(e) => logs::write_logs(format!("Error on \'get_post_date()\' with {} feed --- {}", &feed.name, e.to_string()), debug),
                             }
                         },
-                        Err(e) => logs::write_logs(format!("Error with {} feed --- {}", &feed.name, e.to_string()), debug),
+                        Err(e) => logs::write_logs(format!("Error on \'check_url()\' with {} feed --- {}", &feed.name, e.to_string()), debug),
                     }
                 }
             },
