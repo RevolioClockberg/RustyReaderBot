@@ -5,8 +5,9 @@ use dissolve::strip_html_tags;
 use reqwest::{self, Url};
 
 
-// Check if an url can join RSS feeds list. 
-pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
+// Check if an url is an RSS feeds and return last publication date. 
+pub async fn check_url(url: &str) -> Result<String, Box<dyn Error + Send + Sync>> {
+    let mut publish_date = String::new();
     let err_url = url;
     let url = Url::parse(url)?;
     let client = reqwest::Client::new();
@@ -14,31 +15,22 @@ pub async fn check_url(url: &str) -> Result<(), Box<dyn Error + Send + Sync>> {
     let channel = Channel::read_from(&content[..])?;
 
     match &channel.items.first().unwrap().title() {
-        Some (_) => Ok(()),
+        Some (_) => {
+            // Get the last post of feed
+            if let Some(last_post) = channel.items().first() {
+                publish_date = 
+                    match last_post.pub_date() {
+                        Some(result) => DateTime::parse_from_rfc2822(result)?.format("%Y/%m/%d-%H:%M").to_string(),
+                        None => String::from("no publish date"),
+                    };
+            }
+            Ok(publish_date)
+        },
         None => {
-            let e: Box<dyn Error + Send + Sync> = format!("Can't get last post from {}", err_url).into();
+            let e: Box<dyn Error + Send + Sync> = format!("Can't get post from {}", err_url).into();
             return Err(e);
         },
     }
-}
-
-
-// Get RSS post date
-pub async fn get_post_date(url: &str) -> Result<String, Box<dyn Error + Send + Sync>> {
-    // Get all RSS objects (each posts from an url)
-    let content = reqwest::get(url).await?.bytes().await?;
-    let channel = Channel::read_from(&content[..])?;
-    let mut publish_date = String::new();
-
-    // Get the last post of feed
-    if let Some(last_post) = channel.items().first() {
-        publish_date = 
-            match last_post.pub_date() {
-                Some(result) => DateTime::parse_from_rfc2822(result)?.format("%Y/%m/%d-%H:%M").to_string(),
-                None => String::from("no publish date"),
-            };
-    }
-    Ok(publish_date)
 }
 
 

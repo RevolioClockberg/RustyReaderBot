@@ -58,34 +58,29 @@ async fn start(context: Arc<Command<Text>>) {
             Ok(all_feeds) => {
                 // Parse URLs
                 for feed in all_feeds {
+                    // Validate URL and get last publication date
                     match rss::check_url(&feed.url).await {
-                        Ok (_) => {
-                            // Get date of last post from site
-                            match rss::get_post_date(&feed.url).await{
-                                Ok(last_publication) => {
-                                    // Compare date
-                                    if (&feed.last_post != &last_publication) || (&feed.last_post == "no publish date") {
-                                        // Keep new date for update
-                                        new_posts_date.insert(feed.url.clone(), last_publication.clone());
-                                        // Get post and send it by message
-                                        match rss::get_rss(&feed.url, &feed.name, &last_publication).await {
-                                            Ok(result) => {
-                                                if debug {logs::write_debug(format!("Message sent for {} RSS feed with {} URL.", &feed.name, &feed.url))}
-                                                let _ = context.bot.send_message(
-                                                    context.chat.id.clone(),
-                                                    parameters::Text::with_markdown(&result)
-                                                ).is_web_page_preview_disabled(true).call().await;
-                                            },
-                                            Err(e) => logs::write_logs(format!("Error on \'get_rss()\' with {} feed --- {}", &feed.name, e.to_string()), debug),
-                                        }
-                                    } else if debug {
-                                            logs::write_debug(format!("No new posts for {} RSS feed with {} URL.", &feed.name, &feed.url))
-                                    }
-                                    if debug {logs::write_debug(format!("Waiting to avoid flooding channel"))}
-                                    delay_for(Duration::from_secs(30)).await;
-                                },
-                                Err(e) => logs::write_logs(format!("Error on \'get_post_date()\' with {} feed --- {}", &feed.name, e.to_string()), debug),
+                        Ok (last_publication) => {
+                            // Compare date
+                            if (&feed.last_post != &last_publication) || (&feed.last_post == "no publish date") {
+                                // Keep new date for update
+                                new_posts_date.insert(feed.url.clone(), last_publication.clone());
+                                // Get post and send it by message
+                                match rss::get_rss(&feed.url, &feed.name, &last_publication).await {
+                                    Ok(result) => {
+                                        if debug {logs::write_debug(format!("Message sent for {} RSS feed with {} URL.", &feed.name, &feed.url))}
+                                        let _ = context.bot.send_message(
+                                            context.chat.id.clone(),
+                                            parameters::Text::with_markdown(&result)
+                                        ).is_web_page_preview_disabled(true).call().await;
+                                    },
+                                    Err(e) => logs::write_logs(format!("Error on \'get_rss()\' with {} feed --- {}", &feed.name, e.to_string()), debug),
+                                }
+                            } else if debug {
+                                logs::write_debug(format!("No new posts for {} RSS feed with {} URL.", &feed.name, &feed.url))
                             }
+                            if debug {logs::write_debug(format!("Waiting to avoid flooding channel"))}
+                            delay_for(Duration::from_secs(30)).await;
                         },
                         Err(e) => logs::write_logs(format!("Error on \'check_url()\' with {} feed --- {}", &feed.name, e.to_string()), debug),
                     }
@@ -99,7 +94,7 @@ async fn start(context: Arc<Command<Text>>) {
             Ok(_result) => {
                 if debug {
                     logs::write_debug(format!("Date from RSS posts are updated."));
-                    logs::write_debug(format!("------\n Start waiting for 10 min ... \n-------"));
+                    logs::write_debug(format!("\n------\n Start waiting for 10 min ... \n-------"));
                 }
                 delay_for(Duration::from_secs(600)).await;
                 if debug {logs::write_debug(format!("Going back to work"))}
